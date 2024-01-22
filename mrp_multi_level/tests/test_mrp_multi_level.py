@@ -445,3 +445,12 @@ class TestMrpMultiLevel(TestMrpMultiLevelCommon):
         ]
         product_mrp_area._compute_supply_method()
         self.assertEqual(product_mrp_area.supply_method, "buy")
+
+    def test_18_on_hand_with_lots(self):
+        """Check that on-hand is correctly computed when tracking by lots."""
+        lots_line_1 = self.mrp_inventory_obj.search(
+            [("product_mrp_area_id.product_id", "=", self.product_lots.id)]
+        )
+        self.assertEqual(len(lots_line_1), 1)
+        self.assertEqual(lots_line_1.initial_on_hand_qty, 210)
+        self.assertEqual(lots_line_1.final_on_hand_qty, 185)
